@@ -1,5 +1,5 @@
 use crate::logger::level::Level;
 
 pub trait Logger {
-    fn log(message: String, level: Level);
+    fn log(&self, message: &String, level: &Level);
 }
