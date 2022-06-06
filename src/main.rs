@@ -3,7 +3,6 @@ mod logger;
 
 use std::io::Error;
 use colored::control::set_override;
-use rouille::Response;
 use crate::logger::level::Level;
 use crate::logger::logger_factory::LoggerFactory;
 use crate::server::handler::handler;

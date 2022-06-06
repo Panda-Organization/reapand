@@ -1,5 +1,4 @@
 use std::fs::{create_dir_all, OpenOptions};
-use std::io;
 use std::io::Write;
 use std::path::Path;
 use itertools::Itertools;
@@ -37,7 +36,7 @@ pub fn handler(request: &Request) -> Response {
                 if exfiltrated.is_empty() {
                     return rouille::Response::from(Status::NotFound);
                 }
-                let newFile = filename.trim_matches(&['_', '.', ' ', '/', '\\'] as &[_])
+                let new_file = filename.trim_matches(&['_', '.', ' ', '/', '\\'] as &[_])
                                       .replace(&['\\', '/'][..], "")
                                       .chars()
                                       .dedup_by(|x, y| {
@@ -51,8 +50,8 @@ pub fn handler(request: &Request) -> Response {
                                       .collect::<Vec<&str>>()
                                       .join("/");
 
-                let newPath = format!("files/{}", &newFile);
-                let path = Path::new(&newPath);
+                let new_path = format!("files/{}", &new_file);
+                let path = Path::new(&new_path);
                 println!("{:?}", &path);
                 let prefix = path.parent().unwrap();
                 create_dir_all(prefix).unwrap();
@@ -70,7 +69,7 @@ pub fn handler(request: &Request) -> Response {
                     .expect(&*format!("Cannot write log message to file [{:?}]", &path));
                   return rouille::Response::text(format!(
                     "Filename: {}\nContent: {}",
-                    newFile,
+                    new_file,
                     String::from_utf8_lossy(&content)
                   ));
                 } else {
