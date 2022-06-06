@@ -9,7 +9,7 @@ pub fn handler(request: &Request) -> Response {
         logger.log(&format!(
             "{} - \"{} {}\" - {}us - {}",
             req.remote_addr(), req.method(),
-            req.url(), _elap.as_micros(),
+            req.raw_url(), _elap.as_micros(),
             resp.status_code
         ), &Level::INFO)
     };
@@ -26,8 +26,14 @@ pub fn handler(request: &Request) -> Response {
             return resp
         }
         router!(request,
-            (GET) (/{filename: String}/{content: String}) => {
-                rouille::Response::text("Alo")
+            (GET) (/{filename: String}) => {
+                rouille::Response::text(format!(
+                    "Filename: {}\nContent: {}",
+                    filename,
+                    rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
+                        .decode_utf8_lossy()
+                        .into_owned()
+                ))
             },
             _ => {
                 rouille::Response::from(Status::NotFound)
