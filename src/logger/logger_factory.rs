@@ -9,7 +9,7 @@ use crate::logger::logger::Logger;
 pub struct LoggerFactory;
 
 impl LoggerFactory {
-    fn get_logger(name: String) -> Box<dyn Logger> {
+    pub fn get_logger(name: String) -> Box<dyn Logger> {
         Box::new(ContextualLogger {
             delegate_logger: Box::new(CompositeLogger {
                 dev_log: Box::new(ConsoleLogger),

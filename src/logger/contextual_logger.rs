@@ -3,7 +3,7 @@ use colored::Colorize;
 use crate::logger::level::Level;
 use crate::logger::logger::Logger;
 
-const DATE_FORMAT: &str = "YYYY-MM-dd HH:mm:ss.SSS";
+const DATE_FORMAT: &str = "%Y-%m-%d %H:%M:%S%.3f";
 
 pub struct ContextualLogger {
     pub(crate) caller_class: String,

@@ -1,6 +1,8 @@
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::Write;
+use std::path::{Path, PathBuf};
+use path_absolutize::Absolutize;
 use crate::logger::level::Level;
 use crate::logger::logger::Logger;
 
@@ -10,12 +12,9 @@ pub struct FileLogger {
 
 impl FileLogger {
     pub fn new(path_as_string: &str) -> Self {
-        if let Ok(absolute_path) = fs::canonicalize(path_as_string) {
-            return Self {
-                path: absolute_path.into_os_string().into_string().unwrap()
-            }
+        return Self {
+            path: Path::new(path_as_string).absolutize().unwrap().to_str().unwrap().to_string()
         }
-        panic!("Error: The path does not exist")
     }
 }
 
