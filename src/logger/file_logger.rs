@@ -1,7 +1,6 @@
-use std::fs;
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use path_absolutize::Absolutize;
 use crate::logger::level::Level;
 use crate::logger::logger::Logger;

@@ -9,7 +9,7 @@ pub struct FilteredLogger {
 impl Logger for FilteredLogger {
     fn log(&self, message: &String, level: &Level) {
         if (self.condition)(level) {
-            &self.delegate_logger.log(message, level);
+            self.delegate_logger.log(message, level);
         }
     }
 }

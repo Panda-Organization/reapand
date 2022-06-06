@@ -1,6 +1,6 @@
-use std::process::exit;
 use tiny_http::Server;
 use crate::{Level, LoggerFactory};
+
 
 pub fn new(ip: &str, port: &str) -> Server {
     let logger = LoggerFactory::get_logger(

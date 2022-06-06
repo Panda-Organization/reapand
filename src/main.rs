@@ -1,9 +1,6 @@
-extern crate core;
-
 mod server;
 mod logger;
 
-use std::fmt::format;
 use std::io::Error;
 use colored::control::set_override;
 use crate::logger::level::Level;
