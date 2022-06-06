@@ -12,7 +12,7 @@ impl LoggerFactory {
     // FIX HERE
     fn get_logger<'a>(name: String) -> ContextualLogger<'a> {
         ContextualLogger {
-            delete_logger: &CompositeLogger {
+            delegate_logger: &CompositeLogger {
                 dev_log: &ConsoleLogger,
                 file_log: &FilteredLogger {
                     delegate_logger: &FileLogger::new("files/log.txt"),
