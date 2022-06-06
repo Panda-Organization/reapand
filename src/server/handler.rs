@@ -1,4 +1,5 @@
 use std::io;
+use itertools::Itertools;
 use rouille::{Request, Response, router};
 use crate::{Level, LoggerFactory};
 use crate::server::status::Status;
@@ -27,13 +28,32 @@ pub fn handler(request: &Request) -> Response {
         }
         router!(request,
             (GET) (/{filename: String}) => {
-                rouille::Response::text(format!(
+                let exfiltrated = rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
+                                    .decode_utf8_lossy()
+                                    .into_owned();
+                let newFile = filename.trim_matches(&['_', '.', ' ', '/', '\\'] as &[_])
+                                      .replace(&['\\', '/'][..], "")
+                                      .chars()
+                                      .dedup_by(|x, y| {
+                                            x == &'_' && y == &'_' ||
+                                            x == &'.' && y == &'.'
+                                      })
+                                      .collect::<Vec<char>>()
+                                      .into_iter()
+                                      .collect::<String>()
+                                      .split("_")
+                                      .collect::<Vec<&str>>()
+                                      .join("/");
+                let exfiltrated = base64::decode(exfiltrated);
+                if let Ok(content) = exfiltrated {
+                  return rouille::Response::text(format!(
                     "Filename: {}\nContent: {}",
-                    filename,
-                    rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
-                        .decode_utf8_lossy()
-                        .into_owned()
-                ))
+                    newFile,
+                    String::from_utf8_lossy(&content)
+                  ));
+                } else {
+                    rouille::Response::from(Status::NotFound)
+                }
             },
             _ => {
                 rouille::Response::from(Status::NotFound)
