@@ -16,14 +16,14 @@ impl Logger for ConsoleLogger {
             Level::WARNING => {
                 println!(
                     "[{}] {}",
-                    (&*(level.to_string())).bright_yellow(),
+                    (&*(level.to_string())).bright_yellow().bold(),
                     message
                 )
             }
             Level::INFO => {
                 println!(
                     "[{}] {}",
-                    (&*(level.to_string())).blue(),
+                    (&*(level.to_string())).blue().bold(),
                     message
                 )
             }

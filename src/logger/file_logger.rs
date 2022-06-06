@@ -21,7 +21,7 @@ impl FileLogger {
 impl Logger for FileLogger {
     fn log(&self, message: &String, level: &Level) {
         let mut f = OpenOptions::new()
-            .write(true)
+            .create(true)
             .append(true)
             .open(&self.path)
             .expect(&*format!("Unable to open file [{}]", &self.path));

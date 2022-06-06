@@ -16,6 +16,7 @@ fn main() -> Result<(), Error>{
     );
     let s = server::new("0.0.0.0", "20000");
     logger.log(&format!("Listening on {}", s.server_addr()), &Level::INFO);
-
+    logger.log(&"Coucou".to_string(), &Level::WARNING);
+    logger.log(&"Alo".to_string(), &Level::ERROR);
     Ok(())
 }
