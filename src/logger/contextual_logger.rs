@@ -5,12 +5,12 @@ use crate::logger::logger::Logger;
 
 const DATE_FORMAT: &str = "YYYY-MM-dd HH:mm:ss.SSS";
 
-pub struct ContextualLogger<'a> {
-    pub(crate) delegate_logger: &'a dyn Logger,
-    pub(crate) caller_class: String
+pub struct ContextualLogger {
+    pub(crate) caller_class: String,
+    pub(crate) delegate_logger: Box<dyn Logger>
 }
 
-impl Logger for ContextualLogger<'_> {
+impl Logger for ContextualLogger {
     fn log(&self, message: &String, level: &Level) {
         self.delegate_logger.log(&format!(
             "{} {}: {}",

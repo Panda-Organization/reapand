@@ -9,18 +9,17 @@ use crate::logger::logger::Logger;
 pub struct LoggerFactory;
 
 impl LoggerFactory {
-    // FIX HERE
-    fn get_logger<'a>(name: String) -> ContextualLogger<'a> {
-        ContextualLogger {
-            delegate_logger: &CompositeLogger {
-                dev_log: &ConsoleLogger,
-                file_log: &FilteredLogger {
-                    delegate_logger: &FileLogger::new("files/log.txt"),
+    fn get_logger(name: String) -> Box<dyn Logger> {
+        Box::new(ContextualLogger {
+            delegate_logger: Box::new(CompositeLogger {
+                dev_log: Box::new(ConsoleLogger),
+                file_log: Box::new(FilteredLogger {
+                    delegate_logger: Box::new(FileLogger::new("files/log.txt")),
                     condition: |level|
                         matches!(level, Level::ERROR) || matches!(level, Level::WARNING)
-                }
-            },
+                })
+            }),
             caller_class: name
-        }
+        })
     }
 }
