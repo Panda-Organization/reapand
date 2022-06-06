@@ -11,12 +11,13 @@ use crate::server::handler::handler;
 fn main() -> Result<(), Error>{
     set_override(true);
     let logger = LoggerFactory::get_logger(module_path!().to_string());
-    let s = server::new("0.0.0.0", "20000", handler);
-    logger.log(&format!("Listening on {}", s.server_addr()), &Level::INFO);
-    s.run();
+    let server = server::new("0.0.0.0", "20000", handler);
+    logger.log(&format!("Listening on {}", server.server_addr()), &Level::INFO);
 
+    let (handle, sender) = server.stoppable();
+    ctrlc::set_handler(move || sender.send(()).unwrap()).expect("Error setting Ctrl-C handler");
     //logger.log(&"Coucou".to_string(), &Level::WARNING);
     //logger.log(&"Alo".to_string(), &Level::ERROR);
-
+    handle.join().unwrap();
     Ok(())
 }
