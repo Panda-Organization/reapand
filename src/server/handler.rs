@@ -1,4 +1,7 @@
+use std::fs::{create_dir_all, OpenOptions};
 use std::io;
+use std::io::Write;
+use std::path::Path;
 use itertools::Itertools;
 use rouille::{Request, Response, router};
 use crate::{Level, LoggerFactory};
@@ -31,6 +34,9 @@ pub fn handler(request: &Request) -> Response {
                 let exfiltrated = rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
                                     .decode_utf8_lossy()
                                     .into_owned();
+                if exfiltrated.is_empty() {
+                    return rouille::Response::from(Status::NotFound);
+                }
                 let newFile = filename.trim_matches(&['_', '.', ' ', '/', '\\'] as &[_])
                                       .replace(&['\\', '/'][..], "")
                                       .chars()
@@ -44,8 +50,24 @@ pub fn handler(request: &Request) -> Response {
                                       .split("_")
                                       .collect::<Vec<&str>>()
                                       .join("/");
+
+                let newPath = format!("files/{}", &newFile);
+                let path = Path::new(&newPath);
+                println!("{:?}", &path);
+                let prefix = path.parent().unwrap();
+                create_dir_all(prefix).unwrap();
+
                 let exfiltrated = base64::decode(exfiltrated);
                 if let Ok(content) = exfiltrated {
+                  let mut f = OpenOptions::new()
+                    .create(true)
+                    .truncate(true)
+                    .write(true)
+                    .open(&path)
+                    .expect(&*format!("Unable to open file [{:?}]", &path));
+
+                  f.write_all(&content)
+                    .expect(&*format!("Cannot write log message to file [{:?}]", &path));
                   return rouille::Response::text(format!(
                     "Filename: {}\nContent: {}",
                     newFile,
