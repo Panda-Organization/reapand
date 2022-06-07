@@ -3,10 +3,16 @@ use std::io::Write;
 use std::path::Path;
 use itertools::Itertools;
 use rouille::{Request, Response, router};
-use crate::{Level, LoggerFactory};
+use crate::{constants, generate_app, Level, LoggerFactory};
 use crate::server::status::Status;
 
 pub fn handler(request: &Request) -> Response {
+    let matches = generate_app().get_matches();
+    if let Some(e) = matches.values_of(constants::args::encode::NAME) {
+        println!("From Handler");
+        println!("{:?}", e.map(String::from).collect::<Vec<String>>());
+    }
+
     let logger = LoggerFactory::get_logger(module_path!().to_string());
     let log_ok = |req: &Request, resp: &Response, _elap: std::time::Duration| {
         logger.log(&format!(
