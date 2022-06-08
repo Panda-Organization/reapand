@@ -23,3 +23,11 @@ pub mod port {
     pub const SHORT: char = 'p';
     pub const VALUE_NAME: &str = "port";
 }
+
+pub mod directory {
+    pub const NAME: &str = "Directory";
+    pub const HELP: &str = "Directory in which will be saved files";
+    pub const LONG: &str = "dir";
+    pub const SHORT: char = 'd';
+    pub const VALUE_NAME: &str = "dir";
+}

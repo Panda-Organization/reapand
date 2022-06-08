@@ -13,10 +13,6 @@ use crate::server::handler::handler;
 
 fn main() -> Result<(), Error>{
     set_override(true);
-    /*if let Some(e) = matches.values_of(constants::args::encode::NAME) {
-        println!("From Main");
-        println!("{:?}", e.map(String::from).collect::<Vec<String>>());
-    }*/
     let logger = LoggerFactory::get_logger(module_path!().to_string());
     let server = server::new(
         APP_MATCHES.value_of(constants::args::host::NAME).unwrap(),

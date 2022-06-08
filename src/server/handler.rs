@@ -57,7 +57,14 @@ pub fn handler(request: &Request) -> Response {
                                       .collect::<Vec<&str>>()
                                       .join("/");
 
-                let new_path = format!("files/{}", &new_file);
+                let new_path = format!(
+                    "{}/{}",
+                    APP_MATCHES.value_of(constants::args::directory::NAME)
+                               .unwrap()
+                               .trim_end_matches("/"),
+                    &new_file
+                );
+
                 let path = Path::new(&new_path);
                 println!("{:?}", &path);
                 let prefix = path.parent().unwrap();
