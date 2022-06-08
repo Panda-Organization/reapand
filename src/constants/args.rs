@@ -9,3 +9,17 @@ pub mod encode {
         "bzip2", "rot13"
     ];
 }
+
+pub mod host {
+    pub const NAME: &str = "Host";
+    pub const HELP: &str = "Host Listener";
+    pub const VALUE_NAME: &str = "ip|hostname";
+}
+
+pub mod port {
+    pub const NAME: &str = "Port";
+    pub const HELP: &str = "Port Listener";
+    pub const LONG: &str = "port";
+    pub const SHORT: char = 'p';
+    pub const VALUE_NAME: &str = "port";
+}

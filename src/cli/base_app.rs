@@ -1,4 +1,4 @@
-use clap::{App, AppSettings, Arg};
+use clap::{App, AppSettings, Arg, ColorChoice};
 use crate::constants::{CRATE_ABOUT, CRATE_AUTHORS, CRATE_NAME, CRATE_VERSION};
 
 pub fn base_app() -> App<'static> {
@@ -7,5 +7,6 @@ pub fn base_app() -> App<'static> {
         .author(CRATE_AUTHORS)
         .about(CRATE_ABOUT)
         .setting(AppSettings::DeriveDisplayOrder)
+        .color(ColorChoice::Always)
         .arg_required_else_help(true)
 }

@@ -445,6 +445,7 @@ dependencies = [
  "colored",
  "ctrlc",
  "itertools",
+ "lazy_static",
  "path-absolutize",
  "rouille",
  "strum",
