@@ -21,7 +21,7 @@ For now the tool supports principals encoding of php-filters:
 ::   :::   :: ::::  ::   :::   ::       ::   :::   ::   ::   :::: ::
  :   : :  : :: ::    :   : :   :         :   : :  ::    :   :: :  :
 
-reapand 1.2.0
+reapand 1.3.0
 Raphael Dray <dray.raph@gmail.com>
 Create files by decoding client input from specified encodings
 
@@ -42,4 +42,8 @@ LISTENER:
 
 OUTPUT:
     -d, --dir <dir>    Directory in which will be saved files [default: .]
+
+Command Line Usage Examples:
+reapand -e b64,zlib -p 20000 -d files/
+reapand -e b64,bzip2 -- 127.0.0.1
 ```
