@@ -1,9 +1,15 @@
 [package]
 name = "pandreap"
-version = "0.1.0"
+version = "1.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Raphael Dray <dray.raph@gmail.com>"]
+categories = ["command-line-utilities", "encoding"]
+description = "Create files by decoding client input from specified encodings"
+readme = "README.md"
+repository = "https://github.com/Panda-Organization/reapand"
+license = "Apache-2.0"
+keywords = ["cli", "lfi", "php-filters", "decoding", "zlib", "bzip2", "base64"]
+exclude = ["/ci", "/images", ".*"]
 
 [dependencies]
 rouille = "3.5.0"
@@ -17,3 +23,5 @@ itertools = "0.10.3"
 ctrlc = "3.2.1"
 clap = "3.1.6"
 lazy_static = "1.4.0"
+flate2 = "1.0.24"
+bzip2 = "0.4.3"

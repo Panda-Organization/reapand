@@ -1,16 +1,17 @@
 use std::fs::{create_dir_all, OpenOptions};
-use std::io::Write;
+use std::io::{Read, Write};
 use std::path::Path;
+use bzip2::read::BzDecoder;
+use flate2::read::ZlibDecoder;
 use itertools::Itertools;
 use rouille::{Request, Response, router};
 use crate::{APP_MATCHES, constants, generate_app, Level, LoggerFactory};
 use crate::server::status::Status;
 
 pub fn handler(request: &Request) -> Response {
-    let encodings;
-    if let Some(e) = APP_MATCHES.values_of(constants::args::encode::NAME) {
-        encodings = e.map(String::from).collect::<Vec<String>>();
-    }
+    let encodings = APP_MATCHES.values_of(constants::args::encode::NAME)
+                                                 .unwrap()
+                                                 .map(String::from).collect::<Vec<String>>();
 
     let logger = LoggerFactory::get_logger(module_path!().to_string());
     let log_ok = |req: &Request, resp: &Response, _elap: std::time::Duration| {
@@ -36,10 +37,10 @@ pub fn handler(request: &Request) -> Response {
         }
         router!(request,
             (GET) (/{filename: String}) => {
-                let exfiltrated = rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
+                let exfiltrated_encoded = rouille::percent_encoding::percent_decode(request.raw_query_string().as_bytes())
                                     .decode_utf8_lossy()
                                     .into_owned();
-                if exfiltrated.is_empty() {
+                if exfiltrated_encoded.is_empty() {
                     return rouille::Response::from(Status::NotFound);
                 }
 
@@ -66,12 +67,45 @@ pub fn handler(request: &Request) -> Response {
                 );
 
                 let path = Path::new(&new_path);
-                println!("{:?}", &path);
                 let prefix = path.parent().unwrap();
                 create_dir_all(prefix).unwrap();
 
-                let exfiltrated = base64::decode(exfiltrated);
-                if let Ok(content) = exfiltrated {
+                let content = encodings.iter()
+                    .map(|s| s.clone().into_bytes())
+                    .collect::<Vec<Vec<u8>>>()
+                    .iter()
+                    .fold(exfiltrated_encoded.clone().into_bytes(), |acc, x| match String::from_utf8_lossy(&x).as_ref() {
+                        "b64" => {
+                            if let Ok(content) = base64::decode(acc) {
+                                content
+                            } else {
+                                b"".to_vec()
+                            }
+                        }
+                        "zlib" => {
+                            let mut d = ZlibDecoder::new(acc.as_slice());
+                            let mut v = Vec::new();
+                            if let Ok(content) = d.read_to_end(&mut v) {
+                                v.to_vec()
+                            } else {
+                                b"".to_vec()
+                            }
+                        }
+                        "bzip2" => {
+                            let mut d = BzDecoder::new(acc.as_slice());
+                            let mut v = Vec::new();
+                            if let Ok(content) =  d.read_to_end(&mut v) {
+                                v.to_vec()
+                            } else {
+                                b"".to_vec()
+                            }
+                        }
+                        _ => {
+                            b"".to_vec()
+                        }
+                    });
+
+                if !content.is_empty() {
                   let mut f = OpenOptions::new()
                     .create(true)
                     .truncate(true)
