@@ -20,6 +20,9 @@ pub const CRATE_HEADER: &str = "@@@@@@@   @@@@@@@@   @@@@@@   @@@@@@@    @@@@@@ 
 :!:  !:!  :!:       :!:  !:!  :!:       :!:  !:!  :!:  !:!  :!:  !:!
 ::   :::   :: ::::  ::   :::   ::       ::   :::   ::   ::   :::: ::
  :   : :  : :: ::    :   : :   :         :   : :  ::    :   :: :  : ";
+pub const CRATE_AFTER_HELP: &str = "Command Line Usage Examples:\n\
+                                    reapand -e b64,zlib -p 20000 -d files/\n\
+                                    reapand -e b64,bzip2 -- 127.0.0.1";
 
 lazy_static!{
     pub static ref APP_MATCHES: ArgMatches = generate_app().get_matches();

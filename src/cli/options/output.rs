@@ -1,7 +1,7 @@
-use clap::{App, Arg, ArgGroup, ValueHint};
+use clap::{Command, Arg, ArgGroup, ValueHint};
 use crate::constants::{args::*, groups::*};
 
-pub fn add_output(app: App<'static>) -> App<'static> {
+pub fn add_output(app: Command<'static>) -> Command<'static> {
     app
         .next_help_heading(output::NAME)
         .arg(

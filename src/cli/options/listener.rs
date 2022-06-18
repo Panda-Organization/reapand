@@ -1,7 +1,7 @@
-use clap::{App, Arg, ArgGroup, ValueHint};
+use clap::{Arg, ArgGroup, Command, ValueHint};
 use crate::constants::{args::*, groups::*};
 
-pub fn add_listener(app: App<'static>) -> App<'static> {
+pub fn add_listener(app: Command<'static>) -> Command<'static> {
     app
         .next_help_heading(listener::NAME)
         .arg(

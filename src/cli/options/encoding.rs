@@ -1,7 +1,7 @@
-use clap::{App, Arg, ArgGroup};
+use clap::{Arg, ArgGroup, Command};
 use crate::constants::{args::*, groups::*};
 
-pub fn add_encoding(app: App<'static>) -> App<'static> {
+pub fn add_encoding(app: Command<'static>) -> Command<'static> {
     app
         .next_help_heading(encoding::NAME)
         .arg(

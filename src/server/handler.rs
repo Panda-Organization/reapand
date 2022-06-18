@@ -5,7 +5,7 @@ use bzip2::read::BzDecoder;
 use flate2::read::ZlibDecoder;
 use itertools::Itertools;
 use rouille::{Request, Response, router};
-use crate::{APP_MATCHES, constants, generate_app, Level, LoggerFactory};
+use crate::{APP_MATCHES, constants, Level, LoggerFactory};
 use crate::server::status::Status;
 
 pub fn handler(request: &Request) -> Response {
@@ -85,7 +85,7 @@ pub fn handler(request: &Request) -> Response {
                         "zlib" => {
                             let mut d = ZlibDecoder::new(acc.as_slice());
                             let mut v = Vec::new();
-                            if let Ok(content) = d.read_to_end(&mut v) {
+                            if let Ok(_content) = d.read_to_end(&mut v) {
                                 v.to_vec()
                             } else {
                                 b"".to_vec()
@@ -94,7 +94,7 @@ pub fn handler(request: &Request) -> Response {
                         "bzip2" => {
                             let mut d = BzDecoder::new(acc.as_slice());
                             let mut v = Vec::new();
-                            if let Ok(content) =  d.read_to_end(&mut v) {
+                            if let Ok(_content) =  d.read_to_end(&mut v) {
                                 v.to_vec()
                             } else {
                                 b"".to_vec()
