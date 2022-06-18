@@ -488,25 +488,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21326818e99cfe6ce1e524c2a805c189a99b5ae555a35d19f9a284b427d86afa"
 
 [[package]]
-name = "pandreap"
-version = "1.1.0"
-dependencies = [
- "base64",
- "bzip2",
- "chrono",
- "clap",
- "colored",
- "ctrlc",
- "flate2",
- "itertools",
- "lazy_static",
- "path-absolutize",
- "rouille",
- "strum",
- "strum_macros",
-]
-
-[[package]]
 name = "path-absolutize"
 version = "3.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -594,6 +575,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d34f1408f55294453790c48b2f1ebbb1c5b4b7563eb1f418bcfcfdbb06ebb4e7"
 dependencies = [
  "getrandom",
+]
+
+[[package]]
+name = "reapand"
+version = "1.1.0"
+dependencies = [
+ "base64",
+ "bzip2",
+ "chrono",
+ "clap",
+ "colored",
+ "ctrlc",
+ "flate2",
+ "itertools",
+ "lazy_static",
+ "path-absolutize",
+ "rouille",
+ "strum",
+ "strum_macros",
 ]
 
 [[package]]
