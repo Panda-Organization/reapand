@@ -14,6 +14,7 @@ during Out Of Bound exploitation.
 Its main purpose is to be used in conjunction with a script that 
 uses a wordlist of interesting files.
 
+Reapand is licensed under the Apache 2.0 License.
 ## Command Line Usage
 ```
 @@@@@@@   @@@@@@@@   @@@@@@   @@@@@@@    @@@@@@   @@@  @@@  @@@@@@@
