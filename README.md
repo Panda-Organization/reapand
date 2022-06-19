@@ -99,7 +99,7 @@ with open(WORDLIST) as f:
 
 Note, this script is just an example of what you could build in 
 conjunction with Reapand.
-![Reapand Handling Requests](images/reapand handling requests.png)
+![Reapand Handling Requests](images/reapand_handling_requests.png)
 ```bash
 ❯ tree -R files/
 files/
