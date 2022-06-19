@@ -8,6 +8,12 @@ For now the tool supports principals encoding of php-filters:
 * **Bzip2**
 * **Base64**
 
+It also serves local files and so can be used to serve malicious files
+during Out Of Bound exploitation.
+
+Its main purpose is to be used in conjunction with a script that 
+uses a wordlist of interesting files.
+
 ## Command Line Usage
 ```
 @@@@@@@   @@@@@@@@   @@@@@@   @@@@@@@    @@@@@@   @@@  @@@  @@@@@@@
